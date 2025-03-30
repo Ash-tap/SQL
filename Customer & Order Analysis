@@ -1,0 +1,76 @@
+/**In this SQL, I'mquerying a databse with multiple tables in it to quantify statistics 
+about customer and order data **/
+
+/**Learning about the data**/
+SELECT * FROM BIT_DB.AprSales LIMIT 20;
+
+/**filtering out any orders that do not containt an order ID of length 6**/
+/**filtering can easily be done by just using length(order_id) since that will also filter out the string 'Order ID'
+but for learning purposes we will add the extra where clause**/
+SELECT * FROM BIT_DB.customers WHERE length(order_id) = 6 AND order_id != '%Order ID%';
+
+/**How many many unique orders were placed in January? In other words, how many distinct order ids do we have?
+Remember to filter out the blank and incorrect order IDs!**/
+SELECT COUNT(DISTINCT orderID) FROM BIT_DB.JanSales WHERE length(orderID) = 6;
+    /**Another way to write it**/
+SELECT COUNT(distinct orderid)
+FROM BIT_DB.JanSales
+WHERE length(orderid) = 6
+AND orderid <> 'Order ID';
+
+
+/**Follow up to the question above: How many of those orders were for an iPhone?**/
+    /**learning the products**/
+    SELECT DISTINCT Product FROM BIT_DB.JanSales; 
+    
+SELECT COUNT(DISTINCT orderID) FROM BIT_DB.JanSales
+ WHERE length(orderID) = 6
+AND Product='iPhone';
+
+    
+/**Select the customer account numbers for all the orders that were places in February**/
+/**NOTE: you have to add distinct and length to filter out added information in order_ID**/
+SELECT DISTINCT customers.acctnum 
+FROM BIT_DB.customers
+JOIN BIT_DB.FebSales 
+ON customers.order_id = FebSales.orderID
+WHERE length(orderID) = 6;
+
+
+/**Question: Which product was the cheapest one sold in January, and what was the price?**/
+SELECT DISTINCT Product, MIN(price)
+FROM BIT_DB.JanSales
+WHERE length(orderID) = 6
+ORDER BY price ASC LIMIT 1;
+
+
+/**QUESTION 5: what is the total revenue for each product sold in January?
+(revenue can be calculated using the nunber of products sold and the price of the products)**/
+SELECT Product, SUM(quantity)*price AS total_revenue
+FROM BIT_DB.JanSales
+GROUP BY Product
+;
+
+/**QUESTION: Which products were sold in February at 548 Lincold St,Seatle, WA 98101,
+ how may of each were sold, and what was the total revenue**/
+ 
+SELECT Product, SUM(Quantity), SUM(Quantity)*price AS total_revenue
+FROM BIT_DB.FebSales
+WHERE location = '548 Lincoln St, Seattle, WA 98101'
+GROUP BY product;
+
+
+/**Question: How many customers ordered more than 2 products at a time in February, and what was the
+average amount spent for those customers **/
+/**Note: Using customer table so you must add DISTINCT & length()**/
+SELECT * FROM BIT_DB.FebSales Limit 5;
+
+SELECT COUNT(DISTINCT customers.acctnum) AS total_customers,
+ROUND(AVG(quantity*price),2) AS average_spent
+FROM BIT_DB.customers
+JOIN BIT_DB.FebSales
+ON customers.order_id = Febsales.orderID
+WHERE Febsales.Quantity > 2
+AND length(customers.order_id) = 6
+;
+
