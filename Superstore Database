@@ -1,4 +1,4 @@
-#This project uses the following Superstore data:
+/**This project uses the following Superstore data:**/
 
 CREATE TABLE superstore (
     item_id INTEGER PRIMARY KEY,
@@ -28,39 +28,39 @@ VALUES
     (15, 'Cozy Throw Blanket', 'Furnishings', 24.99, 100, 4.2);
     
     
--- © Copyright 2025 Break Into Tech  -
---For this project, I used SQL to query the Superstore databse to get some key insights about items sold and their prices.
 
---This query orders the items from lowest to highest item price
+/**For this project, I used SQL to query the Superstore databse to get some key insights about items sold and their prices.**/
+
+/**This query orders the items from lowest to highest item price**/
 SELECT *
 FROM superstore
 ORDER BY price
 ;
 
---This calculates the total revenue
+/**This calculates the total revenue**/
 SELECT SUM(price) AS total_revenue
 FROM superstore;
 
---This finds the item with the highest price and displays the item name and price
+/**This finds the item with the highest price and displays the item name and price**/
 SELECT MAX(price) AS highest_value, item_name
 FROM superstore;
 
---This finds the item with the lowest pricec and displays the item name and price
+/**This finds the item with the lowest pricec and displays the item name and price**/
 SELECT MIN(price) AS lowest_value, item_name
 FROM superstore;
 
---This finds the average price of all the items and returns the count of items that are above the average price
+/**This finds the average price of all the items and returns the count of items that are above the average price**/
 SELECT COUNT(*)
 FROM superstore
 WHERE price > (SELECT AVG(price) FROM superstore);
 
---This returns the average cost of an item in the Kitchen Supply category
+/**This returns the average cost of an item in the Kitchen Supply category**/
 SELECT
 ROUND(AVG(price),2)
 FROM superstore
 WHERE category = 'Kitchen Supplies';
 
---Question:How many items do we have in stock for each category?
+/**Question:How many items do we have in stock for each category?**/
 SELECT 
 SUM(stock_quantity) AS total_stock,
 category
